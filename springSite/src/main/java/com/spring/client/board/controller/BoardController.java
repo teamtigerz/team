@@ -1,9 +1,6 @@
 package com.spring.client.board.controller;
 
-import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +26,12 @@ public class BoardController {
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("data", bvo);
 		return "board/boardList";
+	}
+
+	@RequestMapping(value = "/writeForm.do")
+	public String writeForm() {
+		logger.info("writeForm 호출 성공");
+		return "board/writeForm";
 	}
 
 	@RequestMapping(value = "/boardInsert.do", method = RequestMethod.POST)
