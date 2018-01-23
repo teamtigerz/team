@@ -30,7 +30,7 @@ public class BoardController {
 	public String boardList(@ModelAttribute BoardVO bvo, Model model) {
 		logger.info("boardList 호출 성공");
 
-		List<BoardVO> boardList = boardService.boardList();
+		List<BoardVO> boardList = boardService.boardList(bvo);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("data", bvo);
 

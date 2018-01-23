@@ -10,13 +10,64 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/include/css/common.css" />
 <link rel="stylesheet" type="text/css"
-	href="/resources/include/css/Board.css" />
+	href="/resources/include/css/board.css" />
 <script type="text/javascript"
 	src="/resources/include/js/jquery-1.12.4.min.js"></script>
 
 <script type="text/javascript" src="/resources/include/js/common.js"></script>
 <script type="text/javascript">
 	$(function() {
+		/* 검색 후 검색 대상과 검색 단어 출력 */
+		var word = "<c:out value='${data.keyword}' />";
+		var value = "";
+		if (word != "") {
+			$("#keyword").val("<c:out value='${data.keyword}' />");
+			$("#search").val("<c:out value='${data.search}' />");
+			if ($("#search").val() != 'b_content') {
+				//:contains()는 특정 텍스트를 포함한 요소반환
+				if ($("#search").val() == 'b_title')
+					value = "#list tr td.goDetail";
+				else if ($("#search").val() == 'b_name')
+					value = "#list tr td.name";
+				$(value + ":contains('" + word + "')").each(
+						function() {
+							var regex = new RegExp(word, 'gi');
+							$(this).html(
+									$(this).text().replace(
+											regex,
+											"<span class='required'>" + word
+													+ "</span>"));
+						});
+			}
+		}
+		/* 검색 대상이 변경될 때마다 처리 이벤트 */
+		$("#search").change(function() {
+			if ($("#search").val() == "all") {
+				$("#keyword").val("전체 데이터 조회합니다.");
+			} else if ($("#search").val() != "all") {
+				$("#keyword").val("");
+				$("#keyword").focus();
+			}
+		});
+		/* 검색 버튼 클릭 시 처리 이벤트 */
+		$("#searchData").click(function() {
+			if ($("#search").val() != "all") {
+				if (!chkSubmit($('#keyword'), "검색어를"))
+					return;
+			}
+			goPage(1);
+		});
+		$(".order").click(function() {
+			var order_by = $(this).attr("data-value");
+			console.log("선택값 : " + order_by);
+			$("#order_by").val(order_by);
+			if ($("#order_sc").val() == 'DESC') {
+				$("#order_sc").val('ASC');
+			} else {
+				$("#order_sc").val('DESC');
+			}
+			goPage(1);
+		});
 		/* 글쓰기 버튼 클릭 시 처리 이벤트 */
 		$("#insertFormBtn").click(function() {
 			location.href = "/board/writeForm.do";
@@ -70,9 +121,28 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th class="order">글번호</th>
+						<th data-value="b_num" class="order">글번호 <c:choose>
+								<c:when
+									test="${data.order_by=='b_num'
+									and data.order_sc=='ASC'}">▲</c:when>
+								<c:when
+									test="${data.order_by=='b_num'
+									and data.order_sc=='DESC'}">▼</c:when>
+								<c:otherwise>▲</c:otherwise>
+							</c:choose>
+						</th>
 						<th>글제목</th>
-						<th data-value="b_date" class="order">작성일</th>
+						<th data-value="b_date" class="order">작성일 <c:choose>
+								<c:when
+									test="${data.order_by=='b_date'
+									and data.order_sc=='ASC'}">▲</c:when>
+								<c:when
+									test="${data.order_by=='b_date'
+									and data.order_sc=='DESC'}">▼</c:when>
+								<c:otherwise>▲</c:otherwise>
+							</c:choose>
+						</th>
+
 						<th class="borcle">작성자</th>
 					</tr>
 				</thead>
@@ -103,7 +173,6 @@
 		<%-- ============ 글쓰기 버튼 출력 시작 =============== --%>
 		<div class="contentBtn">
 			<input type="button" value="글쓰기" id="insertFormBtn">
-			<!-- <a href="/board/writeForm.do">글쓰기</a> -->
 		</div>
 		<%-- ============ 글쓰기 버튼 출력 종료 =============== --%>
 	</div>
