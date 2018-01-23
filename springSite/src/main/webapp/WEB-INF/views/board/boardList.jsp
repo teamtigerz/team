@@ -16,24 +16,25 @@
 
 <script type="text/javascript" src="/resources/include/js/common.js"></script>
 <script type="text/javascript">
-	/* 글쓰기 버튼 클릭 시 처리 이벤트 */
-	$("#insertFormBtn").click(function() {
-		location.href = "/board/writeForm.do";
-	});
-
-	/* 제목 클릭시 상세 페이지 이동을 위한 처리 이벤트 */
-	$(".goDetail").click(function() {
-		var b_num = $(this).parents("tr").attr("data-num");
-		$("#b_num").val(b_num);
-		console.log("글번호: " + b_num);
-		//상세 페이지로 이동하기 위해 form추가 (id:detailForm)
-		$("#detailForm").attr({
-			"method" : "get",
-			"action" : "/board/boardDetail.do"
+	$(function() {
+		/* 글쓰기 버튼 클릭 시 처리 이벤트 */
+		$("#insertFormBtn").click(function() {
+			location.href = "/board/writeForm.do";
 		});
-		$("#detailForm").submit();
-	});
 
+		/* 제목 클릭시 상세 페이지 이동을 위한 처리 이벤트 */
+		$(".goDetail").click(function() {
+			var b_num = $(this).parents("tr").attr("data-num");
+			$("#b_num").val(b_num);
+			console.log("글번호: " + b_num);
+			//상세 페이지로 이동하기 위해 form추가 (id:detailForm)
+			$("#detailForm").attr({
+				"method" : "get",
+				"action" : "/board/boardDetail.do"
+			});
+			$("#detailForm").submit();
+		});
+	});
 	/* 검색과 한 페이지에 보여줄 레코드 수 처리 및 페이징을 위한 실질적인 처리 함수 */
 	function goPage(page) {
 		if ($("#search").val() == "all") {
@@ -102,6 +103,7 @@
 		<%-- ============ 글쓰기 버튼 출력 시작 =============== --%>
 		<div class="contentBtn">
 			<input type="button" value="글쓰기" id="insertFormBtn">
+			<!-- <a href="/board/writeForm.do">글쓰기</a> -->
 		</div>
 		<%-- ============ 글쓰기 버튼 출력 종료 =============== --%>
 	</div>
