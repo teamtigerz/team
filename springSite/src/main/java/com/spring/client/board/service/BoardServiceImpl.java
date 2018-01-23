@@ -1,10 +1,12 @@
 package com.spring.client.board.service;
 
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.spring.client.board.dao.BoardDao;
 import com.spring.client.board.vo.BoardVO;
 
@@ -12,6 +14,7 @@ import com.spring.client.board.vo.BoardVO;
 @Transactional
 public class BoardServiceImpl implements BoardService {
 	Logger logger = Logger.getLogger(BoardServiceImpl.class);
+
 	@Autowired
 	private BoardDao boardDao;
 
@@ -77,4 +80,5 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return result;
 	}
+
 }

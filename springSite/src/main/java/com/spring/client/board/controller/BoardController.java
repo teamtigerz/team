@@ -1,6 +1,8 @@
 package com.spring.client.board.controller;
 
+import java.io.IOException;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.spring.client.board.service.BoardService;
 import com.spring.client.board.vo.BoardVO;
 
@@ -16,24 +19,36 @@ import com.spring.client.board.vo.BoardVO;
 @RequestMapping(value = "/board")
 public class BoardController {
 	Logger logger = Logger.getLogger(BoardController.class);
+
 	@Autowired
 	private BoardService boardService;
 
+	/**************************************************************
+	 * 글목록 구현하기
+	 **************************************************************/
 	@RequestMapping(value = "/boardList.do", method = RequestMethod.GET)
 	public String boardList(@ModelAttribute BoardVO bvo, Model model) {
 		logger.info("boardList 호출 성공");
+
 		List<BoardVO> boardList = boardService.boardList();
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("data", bvo);
+
 		return "board/boardList";
 	}
 
+	/**************************************************************
+	 * 글쓰기 폼 출력하기
+	 **************************************************************/
 	@RequestMapping(value = "/writeForm.do")
 	public String writeForm() {
 		logger.info("writeForm 호출 성공");
 		return "board/writeForm";
 	}
 
+	/**************************************************************
+	 * 글쓰기 구현하기
+	 **************************************************************/
 	@RequestMapping(value = "/boardInsert.do", method = RequestMethod.POST)
 	public String boardInsert(@ModelAttribute BoardVO bvo, Model model) {
 		logger.info("boardInsert 호출 성공");
@@ -49,6 +64,9 @@ public class BoardController {
 		return "redirect:" + url;
 	}
 
+	/**************************************************************
+	 * 글 상세보기 구현
+	 **************************************************************/
 	@RequestMapping(value = "/boardDetail.do", method = RequestMethod.GET)
 	public String boardDetail(@ModelAttribute BoardVO pvo, Model model) {
 		logger.info("boardDetail 호출 성공");
@@ -62,6 +80,16 @@ public class BoardController {
 		return "board/boardDetail";
 	}
 
+	/**************************************************************
+	 * 비밀번호 확인
+	 * 
+	 * @param b_num
+	 * @param b_pwd
+	 * @return int로 result를 0 또는 1를 리턴할 수도 있고, String로 result 값을 "성공 or 실패"를 리턴할 수도
+	 *         있다.(현재 문자열 리턴) 참고 : @ResponseBody는 전달된 뷰를 통해서 출력하는 것이 아니라 HTTP
+	 *         Response Body에 직접 출력하는 방식. produces 속성은 지정한 미디어 타입과 관련된 응답을 생성하는데 사용한
+	 *         실제 컨텐트 타입을 보장.
+	 **************************************************************/
 	@ResponseBody
 	@RequestMapping(value = "/pwdConfirm.do", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
 	public String pwdConfirm(@ModelAttribute BoardVO bvo) {
@@ -78,6 +106,13 @@ public class BoardController {
 		return value + "";
 	}
 
+	/**************************************************************
+	 * 글수정 폼 출력하기
+	 * 
+	 * @param :
+	 *            b_num
+	 * @return : BoardVO
+	 **************************************************************/
 	@RequestMapping(value = "/updateForm.do")
 	public String updateForm(@ModelAttribute BoardVO bvo, Model model) {
 		logger.info("updateForm 호출 성공");
@@ -88,6 +123,12 @@ public class BoardController {
 		return "board/updateForm";
 	}
 
+	/**************************************************************
+	 * 글수정 구현하기
+	 * 
+	 * @param :
+	 *            BoardVO
+	 **************************************************************/
 	@RequestMapping(value = "/boardUpdate.do", method = RequestMethod.POST)
 	public String boardUpdate(@ModelAttribute BoardVO bvo) {
 		logger.info("boardUpdate 호출 성공");
@@ -104,6 +145,11 @@ public class BoardController {
 		return "redirect:" + url;
 	}
 
+	/**************************************************************
+	 * 글삭제 구현하기
+	 * 
+	 * @throws IOException
+	 **************************************************************/
 	@RequestMapping(value = "/boardDelete.do")
 	public String boardDelete(@ModelAttribute BoardVO bvo) {
 		logger.info("boardDelete 호출 성공");
@@ -118,4 +164,5 @@ public class BoardController {
 		}
 		return "redirect:" + url;
 	}
+
 }
