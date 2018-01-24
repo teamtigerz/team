@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.client.board.service.BoardService;
 import com.spring.client.board.vo.BoardVO;
 import com.spring.common.page.Paging;
+import com.spring.common.util.Util;
 
 @Controller
 @RequestMapping(value = "/board")
@@ -34,11 +35,17 @@ public class BoardController {
 		Paging.setPage(bvo);
 		
 		int total = boardService.boardListCnt(bvo);
-		
 		logger.info("total = " + total);
+		
+		int count = total - (Util.nvl(bvo.getPage())-1) * Util.nvl(bvo.getPageSize());
+		logger.info("count=" + count);
+		
+		
 
 		List<BoardVO> boardList = boardService.boardList(bvo);
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("count", count);
+		model.addAttribute("total", total);
 		model.addAttribute("data", bvo);
 
 		return "board/boardList";
