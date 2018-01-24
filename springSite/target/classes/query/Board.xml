@@ -3,6 +3,21 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spring.client.board.dao.BoardDao">
+	<sql id="boardCommon">
+		SELECT b_num, b_name, b_title, b_date
+		FROM spring_board
+		<where>
+			<if test="search=='b_title'">
+				<![CDATA[ b_title LIKE '%'|| #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='b_content'">
+				<![CDATA[ b_content LIKE '%'|| #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='b_name'">
+				<![CDATA[ b_name LIKE '%'|| #{keyword} ||'%' ]]>
+			</if>
+		</where>
+	</sql>
 
 	<!-- 게시물 기본 조회 <select id="boardList" resultType="board"> SELECT b_num, 
 		b_name, b_title, to_char(b_date,'YYYY-MM-DD') as b_date FROM spring_board 
@@ -23,13 +38,13 @@
 		spring_board
 		<where>
 			<if test="search=='b_title'">
-				<![CDATA[ b_title LIKE '%'|| #{keyword} ||'%' ]]>
+						<![CDATA[ b_title LIKE '%'|| #{keyword} ||'%' ]]>
 			</if>
 			<if test="search=='b_content'">
-				<![CDATA[ b_content LIKE '%'|| #{keyword} ||'%' ]]>
+						<![CDATA[ b_content LIKE '%'|| #{keyword} ||'%' ]]>
 			</if>
 			<if test="search=='b_name'">
-				<![CDATA[ b_name LIKE '%'|| #{keyword} ||'%' ]]>
+						<![CDATA[ b_name LIKE '%'|| #{keyword} ||'%' ]]>
 			</if>
 		</where>
 		<choose>
@@ -48,6 +63,24 @@
 				DESC
 			</when>
 		</choose>
+		) list
+		)
+		<where>
+			<if test="start_row != null and start_row != ''">
+				<if test="end_row != null and end_row != ''">
+					RNUM BETWEEN #{start_row} AND #{end_row}
+				</if>
+			</if>
+		</where>
+
+	</select>
+	<select id="boardListCnt" parameterType="board" resultType="int">
+		/* Board - boardListCnt */
+		SELECT NVL(count(1), 0) FROM
+		( SELECT list.*, ROWNUM AS RNUM
+		FROM (
+		<include refid="boardCommon"></include>
+		ORDER BY b_num desc
 		) list
 		)
 	</select>

@@ -31,6 +31,12 @@ public class BoardServiceImpl implements BoardService {
 		return myList;
 	}
 
+	// 전체 레코드 수 구현
+	@Override
+	public int boardListCnt(BoardVO bvo) {
+		return boardDao.boardListCnt(bvo);
+	}
+
 	// 글입력 구현
 	@Override
 	public int boardInsert(BoardVO bvo) {

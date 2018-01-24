@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.client.board.service.BoardService;
 import com.spring.client.board.vo.BoardVO;
+import com.spring.common.page.Paging;
 
 @Controller
 @RequestMapping(value = "/board")
@@ -26,9 +27,15 @@ public class BoardController {
 	/**************************************************************
 	 * 글목록 구현하기
 	 **************************************************************/
-	@RequestMapping(value = "/boardList.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/boardList", method = RequestMethod.GET)
 	public String boardList(@ModelAttribute BoardVO bvo, Model model) {
 		logger.info("boardList 호출 성공");
+		
+		Paging.setPage(bvo);
+		
+		int total = boardService.boardListCnt(bvo);
+		
+		logger.info("total = " + total);
 
 		List<BoardVO> boardList = boardService.boardList(bvo);
 		model.addAttribute("boardList", boardList);

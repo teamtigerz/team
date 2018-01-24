@@ -1,14 +1,15 @@
-@charset "UTF-8";
+@CHARSET "UTF-8";
 
 caption{display:none;}
 img{border:0px;}
-input[type="text"],input[type="password"],select{font-size:80%; padding:3px;}
-input[type="text"],input[type="password"]{width:250px; }
+input[type="text"],input[type="password"],select{font-size:85%; padding:3px;}
+input[type="text"],input[type="password"]{width:250px; }	
 input[type="button"]{padding:3px; font-size:80%;}
 table{border-collapse:collapse;}
 ul {list-style: none;}
 
 /********** 게시판 리스트 화면 **********/
+
 /* 검색 부분 */
 #boardSearch table{width:96%; margin-top:10px;}
 #boardSearch #search{height:26px;}
@@ -17,11 +18,12 @@ ul {list-style: none;}
 
 /* 리스트 부분 */
 #boardList{margin-top:10px; /* height:110px; */}
-#boardList table{width:96%; padding:0px; border:1px solid #000066; border-bottom:0px;}
-#boardList tr{padding:0px;}
-#boardList th, #boardList td{padding:8px; border-bottom:1px solid #000066; }
+#boardList table{width:96%; padding:0px; border:1px solid #000066; border-bottom:0px;}	
+#boardList tr{padding:0px;}	
+#boardList th, #boardList td{padding:8px; border-bottom:1px solid #000066; }	
 #boardList th{border-right:1px solid #000066; background-color:#e7e7e7;}
-#boardList .borcle{border-right:0px; }
+
+#boardList .borcle{border-right:0px; }	
 #boardList .rCount{font-size:10px; color:red;}
 
 /* 페이징 출력 div 부분 */
@@ -37,13 +39,15 @@ ul {list-style: none;}
 #boardPwdBut #btd1{width:70%; text-align:left; vertical-align:bottom;}
 #boardPwdBut #btd2{width:30%; text-align:right;vertical-align:bottom;}
 #boardPwdBut input{margin-bottom:0px; margin-left:5px;}
-#msg{padding-left:4px; vertical-align:middle; font-weight:bold;}
-#pwdChk #l_pwd{vertical-align:bottom;}
-#pwdChk #b_pwd{border:1px dotted #000066;}
 
-/*********** 게시판 입력 및 수정 화면 **********/
-#b_title, #file{width:480px;}
-#b_content{width:87%; height:200px;}
+#msg{padding-left:4px; vertical-align:middle; font-weight:bold;}	
+#pwdChk #l_pwd{vertical-align:bottom;}
+#pwdChk #b_pwd{border:1px dotted #000066;}	
+	
+/*********** 게시판 입력 화면 **********/
+#b_title, #file{width:480px}		
+#b_content{width:87%; height:200px;}	
+
 #file{display:inline;}
 #imgView{position:absolute;}
 .imgViewData{position:relative; top:-2px; left:0px; z-index:100}
