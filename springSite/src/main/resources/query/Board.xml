@@ -1,52 +1,31 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-
+mapper.dtd">
 <mapper namespace="com.spring.client.board.dao.BoardDao">
 	<sql id="boardCommon">
 		SELECT b_num, b_name, b_title, b_date
 		FROM spring_board
 		<where>
 			<if test="search=='b_title'">
-				<![CDATA[ b_title LIKE '%'|| #{keyword} ||'%' ]]>
+<![CDATA[ b_title LIKE '%'|| #{keyword} ||'%' ]]>
 			</if>
 			<if test="search=='b_content'">
-				<![CDATA[ b_content LIKE '%'|| #{keyword} ||'%' ]]>
+<![CDATA[ b_content LIKE '%'|| #{keyword} ||'%' ]]>
 			</if>
 			<if test="search=='b_name'">
-				<![CDATA[ b_name LIKE '%'|| #{keyword} ||'%' ]]>
+<![CDATA[ b_name LIKE '%'|| #{keyword} ||'%' ]]>
 			</if>
 		</where>
 	</sql>
-
-	<!-- 게시물 기본 조회 <select id="boardList" resultType="board"> SELECT b_num, 
-		b_name, b_title, to_char(b_date,'YYYY-MM-DD') as b_date FROM spring_board 
-		ORDER BY b_num desc </select> -->
-	<!-- 상세 페이지를 위한 게시물 조회 -->
-
 	<!-- 게시물 전체 조회 -->
 	<select id="boardList" parameterType="board" resultType="board">
 		/* Board - boardList */
 		SELECT b_num, b_name, b_title,
 		TO_CHAR(b_date,'YYYY-MM-DD HH24:MI:SS') AS b_date
 		FROM
-		( SELECT list.*,
-		ROWNUM AS RNUM
+		( SELECT list.*, ROWNUM AS RNUM
 		FROM (
-		SELECT b_num, b_name, b_title, b_date
-		FROM
-		spring_board
-		<where>
-			<if test="search=='b_title'">
-						<![CDATA[ b_title LIKE '%'|| #{keyword} ||'%' ]]>
-			</if>
-			<if test="search=='b_content'">
-						<![CDATA[ b_content LIKE '%'|| #{keyword} ||'%' ]]>
-			</if>
-			<if test="search=='b_name'">
-						<![CDATA[ b_name LIKE '%'|| #{keyword} ||'%' ]]>
-			</if>
-		</where>
+		<include refid="boardCommon"></include>
 		<choose>
 			<when test="order_by=='b_num'">
 				ORDER BY b_num
@@ -72,8 +51,8 @@
 				</if>
 			</if>
 		</where>
-
 	</select>
+	<!-- 게시물 전체 개수 -->
 	<select id="boardListCnt" parameterType="board" resultType="int">
 		/* Board - boardListCnt */
 		SELECT NVL(count(1), 0) FROM
@@ -84,12 +63,11 @@
 		) list
 		)
 	</select>
-
+	<!-- 상세 페이지를 위한 게시물 조회 -->
 	<select id="boardDetail" parameterType="int" resultType="board">
-		/* Board
-		- boardDetail */
+		/* Board - boardDetail */
 		SELECT
-		b_num, b_name, b_title, b_content,
+		b_num, b_name, b_title, b_content, b_file,
 		TO_CHAR(b_date,'YYYY-MM-DD HH24:MI:SS') AS b_date
 		FROM spring_board
 		WHERE b_num = #{b_num}
@@ -105,6 +83,9 @@
 		b_name,
 		b_title,
 		b_content,
+		<if test="b_file != null and b_file != ''">
+			b_file,
+		</if>
 		b_pwd
 		)
 		VALUES(
@@ -112,17 +93,18 @@
 		,#{b_name}
 		,#{b_title}
 		,#{b_content}
+		<if test="b_file != null and b_file != ''">
+			,#{b_file}
+		</if>
 		,#{b_pwd}
 		)
 	</insert>
 	<!-- 해당 번호의 비밀번호 확인 -->
 	<select id="pwdConfirm" parameterType="board" resultType="int">
-		/*
-		Board - pwdConfirm */
+		/* Board - pwdConfirm */
 		SELECT NVL((
 		SELECT 1 FROM spring_board
-		WHERE b_num
-		= #{b_num}
+		WHERE b_num = #{b_num}
 		AND b_pwd = #{b_pwd}
 		), 0) as state
 		FROM dual
@@ -132,9 +114,11 @@
 		/* Board - boardUpdate */
 		UPDATE spring_board
 		SET b_title = #{b_title}
-		,
-		b_content = #{b_content}
+		, b_content = #{b_content}
 		, b_date = sysdate
+		<if test="b_file != ''">
+			, b_file = #{b_file}
+		</if>
 		<if test="b_pwd != ''">
 			, b_pwd = #{b_pwd}
 		</if>
@@ -145,5 +129,4 @@
 		/* Board - boardDelete */
 		DELETE FROM spring_board WHERE b_num = #{b_num}
 	</delete>
-
 </mapper>
