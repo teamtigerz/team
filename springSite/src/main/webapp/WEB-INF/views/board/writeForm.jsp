@@ -28,6 +28,10 @@
 			else if (!chkSubmit($('#b_pwd'), "비밀번호를"))
 				return;
 			else {
+				if ($('file').val() != "") {
+					if (!chkFile($('#file')))
+						return;
+				}
 				$("#f_writeForm").attr({
 					"method" : "POST",
 					"action" : "/board/boardInsert.do"
@@ -48,7 +52,8 @@
 			<h3>게시판 글작성</h3>
 		</div>
 		<div class="contentTB">
-			<form id="f_writeForm" name="f_writeForm">
+			<form id="f_writeForm" name="f_writeForm"
+				enctype="multipart/form-data">
 				<table id="boardWrite">
 					<colgroup>
 						<col width="17%" />
@@ -65,6 +70,10 @@
 					<tr>
 						<td class="ac vm">내용</td>
 						<td><textarea name="b_content" id="b_content"></textarea></td>
+					</tr>
+					<tr>
+						<td class="ac">첨부파일</td>
+						<td><input type="file" name="file" id="file"></td>
 					</tr>
 					<tr>
 						<td class="ac">비밀번호</td>

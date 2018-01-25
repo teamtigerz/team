@@ -18,6 +18,17 @@
 	var butChk = 0; // 수정버튼과 삭제버튼을 구별하기 위한 변수
 	$(function() {
 		$("#pwdChk").hide();
+
+		/* 첨부파일 이미지 보여주기 위한 속성 추가 */
+		var file = "<c:out value='${detail.b_file}' />";
+		if (file != "") {
+			$("#fileImage").attr({
+				src : "/uploadStorage/board/${detail.b_file}",
+				width : "450px",
+				height : "200px"
+			});
+		}
+
 		/* 수정 버튼 클릭 시 처리 이벤트 */
 
 		$("#updateFormBtn").click(function() {
@@ -39,9 +50,11 @@
 		});
 
 		/* 목록 버튼 클릭 시 처리 이벤트 */
-		$("#boardListBtn").click(function() {
-			location.href = "/board/boardList.do";
-		});
+		$("#boardListBtn")
+				.click(
+						function() {
+							location.href = "/board/boardList.do?page=${param.page}&pageSize=${param.pageSize}";
+						});
 	});
 	/* 비밀번호 확인 버튼 클릭시 실질적인 처리 함수 */
 	function boardPwdConfirm() {
@@ -85,7 +98,11 @@
 			<h3>게시판 상세보기</h3>
 		</div>
 		<form name="f_data" id="f_data" method="POST">
-			<input type="hidden" name="b_num" value="${detail.b_num}" />
+			<input type="hidden" name="b_num" value="${detail.b_num}" /> <input
+				type="hidden" name="page" id="page" value="${param.page}" /> <input
+				type="hidden" name="pageSize" id="pageSize"
+				value="${param.pageSize}" /> <input type="hidden" name="b_file"
+				id="b_file" value="${detail.b_file}" />
 		</form>
 		<%-- ========= 비밀번호 확인 버튼 및 버튼 추가 시작 ====== --%>
 		<table id="boardPwdBut">
@@ -131,6 +148,12 @@
 						<td class="ac vm">내용</td>
 						<td colspan="3">${detail.b_content}</td>
 					</tr>
+					<c:if test="${detail.b_file !=''}">
+						<tr>
+							<td class="ac vm">첨부파일 이미지</td>
+							<td colspan="3"><img id="fileImage"></td>
+						</tr>
+					</c:if>
 				</tbody>
 			</table>
 		</div>
