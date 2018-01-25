@@ -142,7 +142,7 @@
 								<option value="b_title">제목</option>
 								<option value="b_content">내용</option>
 								<option value="b_name">작성자</option>
-						</select> <input type="text" name="keyword" id="keyword" value="검색어를입력하세요" />
+						</select> <input type="text" name="keyword" id="keyword" value="검색어를입력하세요" onfocus="this.value=''"/>
 							<input type="button" value="검색" id="searchData" /></td>
 						<td id="btd2">한페이지에 <select id="pageSize" name="pageSize">
 								<option value="1">1줄</option>

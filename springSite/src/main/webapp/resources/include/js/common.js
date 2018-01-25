@@ -57,3 +57,13 @@ function chkData(item, msg) {
 		return true;
 	}
 }
+
+function chkFile(item){
+	var ext = item.bal().split('.').pop().toLowerCase();
+	if(jQuery.inAraay(ext,['gif','png','jpg','jpeg']) == -1){
+		alert('gif, png, jps, jpeg 파일만 업로드 할수 있습니다.');
+		return false;
+	}else{
+		return true;
+	}
+}
