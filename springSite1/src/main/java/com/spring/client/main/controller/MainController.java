@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class MainController {
 	Logger logger = Logger.getLogger(MainController.class);
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/")
 	public String main() {
 		return "index";
 	}
